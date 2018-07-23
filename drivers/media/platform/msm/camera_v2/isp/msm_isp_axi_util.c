@@ -1588,23 +1588,6 @@ void msm_isp_halt_send_error(struct vfe_device *vfe_dev, uint32_t event)
 	} else if (!vfe_dev->axi_data.num_active_stream)
 		return;
 
-		spin_lock_irqsave(
-			&vfe_dev->common_data->common_dev_data_lock, flags);
-		vfe_dev_other = vfe_dev->common_data->dual_vfe_res->
-			vfe_dev[vfe_id_other];
-		if (!vfe_dev->axi_data.num_active_stream ||
-			!vfe_dev_other->axi_data.num_active_stream) {
-			spin_unlock_irqrestore(
-				&vfe_dev->common_data->common_dev_data_lock,
-				flags);
-			pr_err("%s:skip the recovery as no active streams\n",
-				 __func__);
-			return;
-		}
-		spin_unlock_irqrestore(
-			&vfe_dev->common_data->common_dev_data_lock, flags);
-	} else if (!vfe_dev->axi_data.num_active_stream)
-		return;
 	if (ISP_EVENT_PING_PONG_MISMATCH == event &&
 		vfe_dev->axi_data.recovery_count < MAX_RECOVERY_THRESHOLD) {
 		vfe_dev->hw_info->vfe_ops.irq_ops.
